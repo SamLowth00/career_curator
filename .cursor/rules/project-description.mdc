@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+
+This is the general plan for this project:
+so to conclude, this is the app i want to build:
+- User can sign in to the web app (i will need some auth for this)
+- If registering, user needs to be stored in a User table possibly?
+- User can upload their CV, CV will be stored as a file, and will be scanned, AI agent will parse the CV (using langChain?) to extract Skills that the user already has, should this be stored in the User table?
+
+- User can input title and description and link to a job, this will be stored in a 'Jobs' table?
+- AI will parse the Job description, and extract skills needed for the job, responsibilities of the job, experience needed for the job
+- Embedding will be created for the job, taking the skills and info in inputs too, so that we can match similar jobs (can use sklearn for this?) (also, should the embedding be stored in a new JobEmbedding table, or also in the Job table?)
+
+- When requested, AI agent take the user CV as input, along with all job titles and descriptions, and generate a study plan for the user, filling in any gaps that they have not got, or any skills that come up a lot.
+
+
+And here is how i have ordered how i will complete this project:
+
+1. setup app prerequisites
+2.setup postgres database
+3. create authentication, and save users to User table
+4. Create CV upload flow, using LangChain to parse it, and create the required Skills in Skill table and UserSkill
+5. Create Job creation flow, using LangChain to parse it, and create the required skills in Skill table and JobSkill
+6. Create the embedding generation flow for the job creation, storing the created embedding in JobEmbedding
+7. Create the plan generation flow, storing the generated plan in StudyPlan table

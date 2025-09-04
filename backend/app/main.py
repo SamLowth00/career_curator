@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.auth.routes import auth_router, register_router, users_router
 from app.routes.job import router as job_router
 from app.routes.plan import router as plan_router
+from app.routes.skill import router as skill_router
+
 from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from .env file
 
@@ -28,6 +30,7 @@ app.include_router(users_router, prefix="/users", tags=["users"])
 #others
 app.include_router(job_router, prefix="/jobs", tags=["jobs"])
 app.include_router(plan_router, prefix="/plan", tags=["plans"])
+app.include_router(skill_router, prefix="/skill", tags=["skill"])
 
 @app.get("/")
 async def root():

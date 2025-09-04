@@ -46,3 +46,8 @@ export async function generatePlan () {
     const response = await axiosApi.post('/plan/generate-plan');
     return response.data
 }
+
+export async function getSkills() {
+    const response = await axiosApi.post('/skill/list');
+    return response.data
+}

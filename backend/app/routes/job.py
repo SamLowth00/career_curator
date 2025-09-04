@@ -13,19 +13,13 @@ router = APIRouter()
 
 @router.post("/", response_model=JobResponse)
 async def create_job(job: JobCreate, db: AsyncSession = Depends(get_async_session), user: User = Depends(get_current_active_user)):
-    print(f'user id {user.id}')
     result = await db.execute(select(Skill).where(Skill.user_id == user.id))
-    print(f'RESULT {result}')
     user_skills = result.scalars().all()
-    print(f'SKILLS {user_skills}');
     user_skill_names = [skill.name for skill in user_skills]
     summary, required_skills = parse_job_with_langchain(job.raw_title, job.raw_description, user_skill_names)
     # 2. Get all skills in Skill table
-    print(f"SUMMARY {summary}")
-    print(f"REQ SKILL {required_skills}")
 
     skill_name_map = {s.name.lower(): s for s in user_skills}
-    print(f"skills: {skill_name_map}")
     # 3. Create Job record
     new_job = Job(
         user_id=user.id,
@@ -69,7 +63,38 @@ async def delete_job(job_id: str, db: AsyncSession = Depends(get_async_session),
     job = result.scalar_one_or_none()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
+        # Get all skills associated with this job before deleting
+    job_skills_result = await db.execute(
+        select(JobSkill).where(JobSkill.job_id == job_id)
+    )
+    job_skills = job_skills_result.scalars().all()
+    # Extract skill IDs that will be affected
+    affected_skill_ids = [job_skill.skill_id for job_skill in job_skills]
 
     await db.delete(job)
     await db.commit()
-    return None  #
+
+    for skill_id in affected_skill_ids:
+        # Check if this skill is still used by any other jobs from this user
+        remaining_job_skills_result = await db.execute(
+            select(JobSkill)
+            .join(Job, JobSkill.job_id == Job.id)
+            .where((JobSkill.skill_id == skill_id) & (Job.user_id == user.id))
+        )
+        #this gets any other jobskills from this user, that is from one of the deleted jobskills
+        
+        remaining_job_skills = remaining_job_skills_result.scalars().all()
+        print(f'remaining jobs: {remaining_job_skills}')
+        # If no other jobs use this skill, delete the skill
+        if not remaining_job_skills:
+            skill_result = await db.execute(
+                select(Skill).where((Skill.id == skill_id) & (Skill.user_id == user.id))
+            )
+            skill = skill_result.scalar_one_or_none()
+            print(f'skill: {skill}')
+            if skill:
+                await db.delete(skill)
+    
+    await db.commit()
+
+    return None  

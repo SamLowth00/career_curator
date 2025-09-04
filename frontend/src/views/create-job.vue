@@ -50,27 +50,35 @@
 <script setup>
 import { ref } from 'vue'
 import { createJob } from '@/api/api.js'
+import { useRouter } from 'vue-router'
 const title = ref('')
 const description = ref('')
 const salary = ref(null)
 const link = ref('')
+const router = useRouter()
 
 async function submitForm() {
-  // For now, just log the form data
-  console.log({
-    title: title.value,
-    description: description.value,
-    salary: salary.value,
-    link: link.value,
-  })
 
-  const response = await createJob({
-    rawTitle: title.value,
-    rawDescription: description.value,
-    jobSalary: salary.value,
-    link: link.value
-  })
-  console.log(response);
+  try {
+      console.log({
+      title: title.value,
+      description: description.value,
+      salary: salary.value,
+      link: link.value,
+    })
+
+    const response = await createJob({
+      rawTitle: title.value,
+      rawDescription: description.value,
+      jobSalary: salary.value,
+      link: link.value
+    })
+    console.log(response);
+    router.push('/jobs-list')
+
+  } catch (err) {
+    console.log(err);
+  }
 
 }
 </script>

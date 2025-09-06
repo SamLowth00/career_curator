@@ -42,3 +42,7 @@ class JobSkillRead(JobSkillBase):
 
     class Config:
         orm_mode = True
+
+class SalarySummary(BaseModel):
+    avg_salary: Optional[float] = None
+    records_used: int = 0

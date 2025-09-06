@@ -48,6 +48,11 @@ export async function generatePlan () {
 }
 
 export async function getSkills() {
-    const response = await axiosApi.post('/skill/list');
+    const response = await axiosApi.get('/skill/list');
+    return response.data
+}
+
+export async function getAverageSalary() {
+    const response = await axiosApi.get('/salary/average')
     return response.data
 }

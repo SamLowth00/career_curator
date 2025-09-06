@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-center items-center min-h-[250px] max-h-[500px]">
+    <div class="flex justify-center items-center min-h-[250px] max-h-[500px] overflow-scroll">
         <template v-if="fetchingPlan">
             <span>FETCHING PLAN</span>
         </template>

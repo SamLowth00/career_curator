@@ -4,9 +4,7 @@ from app.auth.models import User
 from app.models import Job, Skill, JobSkill
 from typing import List
 
-async def fetch_user_skills(db: AsyncSession, user: User):
-    print('hello')
-    
+async def fetch_user_skills(db: AsyncSession, user: User):    
     query = (
         select(Skill.id, Skill.name, func.count(JobSkill.job_id).label('job_count'))
         .join(JobSkill, Skill.id == JobSkill.skill_id)

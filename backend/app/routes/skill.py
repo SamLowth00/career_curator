@@ -8,7 +8,7 @@ from app.models import Skill
 from typing import List
 router = APIRouter()
 
-@router.post('/list')
+@router.get('/list')
 async def fetch_skills(db: AsyncSession = Depends(get_async_session), user: User = Depends(get_current_active_user)):
     skillReturned = await fetch_user_skills(db, user)
     return skillReturned

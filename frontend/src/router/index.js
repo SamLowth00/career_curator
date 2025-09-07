@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/views/home-page.vue'
+import UserPage from '@/views/user-page.vue'
 import Login from '@/views/login.vue'
 import { getCurrentUser } from '@/api/api'
 import { useUserStore } from '@/stores/user';
 import CreateJob from '@/views/create-job.vue';
 import JobsList from '@/views/jobs-list.vue';
+import JobAgent from '@/views/job-agent.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -22,6 +24,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/user',
+      name: 'User',
+      component: UserPage,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/create-job',
       name: 'CreateJob',
       component: CreateJob,
@@ -33,6 +43,14 @@ const router = createRouter({
       path: '/jobs-list',
       name: 'JobsList',
       component: JobsList,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/agent',
+      name: 'Agent',
+      component: JobAgent,
       meta: {
         requiresAuth: true
       }

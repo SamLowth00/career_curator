@@ -17,7 +17,7 @@ class JobResponse(BaseModel):
     job_salary: Optional[int] = None
     link: Optional[str] = None
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # --- Skill Schemas ---
 
@@ -41,7 +41,7 @@ class JobSkillRead(JobSkillBase):
     id: UUID
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class SalarySummary(BaseModel):
     avg_salary: Optional[float] = None

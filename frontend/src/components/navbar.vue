@@ -8,6 +8,15 @@
       
       <!-- Right side - Navigation and user info -->
       <div class="flex items-center space-x-4">
+        <!-- AI Agent icon button -->
+        <router-link 
+          to="/agent" 
+          class="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors duration-200"
+          title="AI Agent"
+        >
+          <img src="@/icons/sparkle-icon.svg" alt="AI Agent" class="w-6 h-6" />
+        </router-link>
+        
         <!-- List icon button -->
         <router-link 
           to="/jobs-list" 
@@ -27,9 +36,12 @@
         </router-link>
         
         <!-- User greeting -->
-        <div class="text-gray-700 font-medium">
+        <router-link 
+          to="/user" 
+          class="text-gray-700 font-medium hover:text-blue-600 hover:underline transition-colors duration-200 cursor-pointer"
+        >
           Hello {{ userStore.email }}
-        </div>
+        </router-link>
       </div>
     </div>
   </nav>

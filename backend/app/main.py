@@ -5,6 +5,8 @@ from app.routes.job import router as job_router
 from app.routes.plan import router as plan_router
 from app.routes.skill import router as skill_router
 from app.routes.salary import router as salary_router
+from app.routes.chat import router as agent_router
+
 from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from .env file
 
@@ -32,6 +34,9 @@ app.include_router(job_router, prefix="/jobs", tags=["jobs"])
 app.include_router(plan_router, prefix="/plan", tags=["plans"])
 app.include_router(skill_router, prefix="/skill", tags=["skill"])
 app.include_router(salary_router, prefix="/salary", tags=["salary"])
+
+#agent
+app.include_router(agent_router, prefix="/chat", tags=["agent"])
 @app.get("/")
 async def root():
     return {"message": "Hello World from FastAPI!"}

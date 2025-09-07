@@ -56,3 +56,15 @@ export async function getAverageSalary() {
     const response = await axiosApi.get('/salary/average')
     return response.data
 }
+
+export async function agentChat (payload) {
+    const response = await axiosApi.post('/chat/chat', payload, { headers: {
+        'Content-Type': 'application/json'
+    }});
+    return response.data
+} 
+
+export async function clearAgent() {
+    const response = await axiosApi.post('/chat/clear');
+    return response.data
+}

@@ -20,6 +20,7 @@ import { v4 as uuidv4 } from 'uuid';
 const messages = ref([]) // full history shown
 const text = ref('')
 const loading = ref(false)
+
 async function onSend() {
   const content = text.value.trim()
   if (!content) return

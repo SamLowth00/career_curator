@@ -44,17 +44,6 @@
               </div>
             </div>
           </div>
-
-          <!-- User ID (for debugging/development) -->
-          <div class="mt-6 pt-6 border-t border-gray-200">
-            <div class="space-y-2">
-              <label class="block text-sm font-medium text-gray-500">User ID</label>
-              <div class="flex items-center p-3 bg-gray-100 rounded-lg">
-                <img src="@/icons/tag-icon.svg" class="w-5 h-5 text-gray-400 mr-3" />
-                <span class="text-gray-600 text-sm font-mono">{{ userStore.id || 'Not available' }}</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

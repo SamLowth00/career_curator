@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center">
       <!-- Left side - Brand name -->
       <div class="flex items-center">
-        <h1 class="text-2xl font-bold text-blue-600">Career Curator</h1>
+        <h1 class="text-2xl font-bold text-blue-600">SkillCompass</h1>
       </div>
       
       <!-- Right side - Navigation and user info -->

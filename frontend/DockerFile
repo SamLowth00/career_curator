@@ -4,6 +4,10 @@ FROM node:20-alpine AS builder
 # Set working directory
 WORKDIR /app
 
+# Accept build argument for API URL
+ARG VITE_API_URL
+ENV VITE_API_URL=https://backend-production-3c08.up.railway.app
+
 # Copy package files
 COPY package*.json ./
 

@@ -15,7 +15,8 @@ app = FastAPI()
 origins = [
     "http://localhost:5173",  # Vite dev server
     # Add more origins if needed
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://frontend-production-0870.up.railway.app"
 ]
 
 app.add_middleware(
@@ -25,6 +26,23 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add startup event to create tables automatically
+@app.on_event("startup")
+async def startup():
+    """Create database tables on startup if they don't exist"""
+    from app.db import engine, Base
+    from app.auth.models import User
+    from app.models import Job, Skill, JobSkill
+    
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        print("✅ Database tables created/verified successfully")
+    except Exception as e:
+        print(f"⚠️  Error creating tables: {e}")
+        # Don't crash the app if tables already exist
+        
 #users
 app.include_router(auth_router, prefix="/auth/jwt", tags=["auth"])
 app.include_router(register_router, prefix="/auth", tags=["auth"])

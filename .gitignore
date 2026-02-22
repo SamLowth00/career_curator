@@ -59,3 +59,6 @@ dmypy.json
 # Pyre type checker
 .pyre/.cursor/
 .cursor/
+
+#claude
+CLAUDE.md

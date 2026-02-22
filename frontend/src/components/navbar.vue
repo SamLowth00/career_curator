@@ -2,9 +2,9 @@
     <nav class="bg-white shadow-md border-b border-gray-200 px-6 py-4">
     <div class="flex justify-between items-center">
       <!-- Left side - Brand name -->
-      <div class="flex items-center">
+      <router-link to="/" class="flex items-center">
         <h1 class="text-2xl font-bold text-blue-600">SkillCompass</h1>
-      </div>
+      </router-link>
       
       <!-- Right side - Navigation and user info -->
       <div class="flex items-center space-x-4">

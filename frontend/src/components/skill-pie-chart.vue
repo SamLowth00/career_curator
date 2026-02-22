@@ -48,12 +48,21 @@ const chartOptions = {
   }
 }
 const pieChartData = computed(() => {
+  const sorted = [...skillsData.value].sort((a, b) => b.job_count - a.job_count)
+  const top5 = sorted.slice(0, 5)
+  const rest = sorted.slice(5)
+  const labels = top5.map((skill) => skill.name)
+  const data = top5.map((skill) => skill.job_count)
+  if (rest.length > 0) {
+    labels.push(`Other (${rest.length} skills)`)
+    data.push(rest.reduce((sum, skill) => sum + skill.job_count, 0))
+  }
   return {
-    labels: skillsData.value.map((skill) => skill.name),
+    labels,
     datasets: [{
       label: 'Skill chart',
-      data: skillsData.value.map((skill) => skill.job_count),
-      backgroundColor: CHART_COLORS.slice(0, skillsData.value.length)
+      data,
+      backgroundColor: CHART_COLORS.slice(0, labels.length)
     }]
   }
 })

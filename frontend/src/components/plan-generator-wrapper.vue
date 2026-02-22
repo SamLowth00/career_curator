@@ -10,14 +10,20 @@
             </button>
         </template>
         <template v-else>
-            <div class="plan-container" v-html="marked(plan)"></div>
+            <div class="flex flex-col gap-4">
+                <div class="plan-container" v-html="marked(plan)"></div>
+                <button @click="handleGenerate" class="bg-primary rounded p-4 flex gap-1 shadow-lg text-white cursor-pointer hover:bg-primary-hover self-center">
+                    <img src="@/icons/plus-circle-white.svg" alt="Regenerate" class="w-6 h-6" />
+                    Regenerate plan
+                </button>
+            </div>
         </template>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { generatePlan } from '@/api/api';
+import { ref, onMounted } from 'vue';
+import { generatePlan, getSavedPlan } from '@/api/api';
 import { marked } from 'marked';
 const plan = ref('');
 const fetchingPlan = ref(false)
@@ -30,6 +36,12 @@ async function handleGenerate () {
     fetchingPlan.value = false
 }
 
+onMounted(async () => {
+    const saved = await getSavedPlan();
+    if (saved) {
+        plan.value = saved;
+    }
+})
 </script>
 
 <style>

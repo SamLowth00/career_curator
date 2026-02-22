@@ -68,3 +68,8 @@ export async function clearAgent() {
     const response = await axiosApi.post('/chat/clear');
     return response.data
 }
+
+export async function getSavedPlan() {
+    const response = await axiosApi.get('/plan/saved-plan');
+    return response.data;  // will be the markdown string, or null
+}

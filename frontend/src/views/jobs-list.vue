@@ -1,12 +1,12 @@
 <template>
   <div class="p-6">
     <div v-if="loading" class="flex justify-center items-center h-40">
-      <span class="text-blue-600 text-lg font-semibold">Loading jobs...</span>
+      <span class="text-teal-600 text-lg font-semibold">Loading jobs...</span>
     </div>
     <div v-else>
-      <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow">
+      <table class="min-w-full bg-white border border-stone-200 rounded-xl shadow-sm">
         <thead>
-          <tr class="bg-blue-100 text-left">
+          <tr class="bg-teal-50 text-left">
             <th class="py-2 px-4 border-b">Job Title</th>
             <th class="py-2 px-4 border-b">Job Summary</th>
             <th class="py-2 px-4 border-b">Job Description</th>
@@ -16,13 +16,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="job in jobs" :key="job.id" class="hover:bg-blue-50">
+          <tr v-for="job in jobs" :key="job.id" class="hover:bg-teal-50/40 transition-colors">
             <td class="py-2 px-4 border-b">{{ job.title }}</td>
             <td class="py-2 px-4 border-b"><span class="line-clamp-6">{{ job.summary }}</span></td>
             <td class="py-2 px-4 border-b"><span class="line-clamp-6 h-[100%]">{{ job.description }}</span></td>
             <td class="py-2 px-4 border-b">{{ job.salary }}</td>
             <td class="py-2 px-4 border-b">
-              <a :href="job.link" target="_blank" class="text-blue-600 underline">View</a>
+              <a :href="job.link" target="_blank" class="text-teal-600 underline">View</a>
             </td>
             <td class="py-2 px-4 border-b text-center" >
               <button @click="handleDelete(job.id)" class="text-red-500 hover:text-red-700 cursor-pointer" title="Delete">

@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submitForm" class="max-w-md mx-auto p-4 bg-white rounded shadow">
+  <form @submit.prevent="submitForm" class="max-w-md mx-auto mt-10 p-8 bg-white rounded-2xl shadow-md border border-stone-200">
     <div class="mb-4">
       <label for="title" class="block text-gray-700 font-bold mb-2">Job Title<span class="text-red-500">*</span></label>
       <input
@@ -43,7 +43,7 @@
         placeholder="Enter job link (optional)"
       />
     </div>
-    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Submit</button>
+    <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200">Submit</button>
   </form>
 </template>
 

@@ -1,9 +1,9 @@
 <template>
-    <nav class="bg-white shadow-md border-b border-gray-200 px-6 py-4">
+    <nav class="bg-white shadow-sm border-b border-stone-200 px-6 py-4">
     <div class="flex justify-between items-center">
       <!-- Left side - Brand name -->
       <router-link to="/" class="flex items-center">
-        <h1 class="text-2xl font-bold text-blue-600">SkillCompass</h1>
+        <h1 class="text-2xl font-bold text-teal-600">SkillCompass</h1>
       </router-link>
       
       <!-- Right side - Navigation and user info -->
@@ -11,7 +11,7 @@
         <!-- AI Agent icon button -->
         <router-link 
           to="/agent" 
-          class="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors duration-200"
+          class="p-2 text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-full transition-colors duration-200"
           title="AI Agent"
         >
           <img src="@/icons/sparkle-icon.svg" alt="AI Agent" class="w-6 h-6" />
@@ -20,7 +20,7 @@
         <!-- List icon button -->
         <router-link 
           to="/jobs-list" 
-          class="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors duration-200"
+          class="p-2 text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-full transition-colors duration-200"
           title="View Jobs"
         >
           <img src="@/icons/list-bullets.svg" alt="Jobs List" class="w-6 h-6" />
@@ -29,7 +29,7 @@
         <!-- Plus circle icon button -->
         <router-link 
           to="/create-job" 
-          class="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors duration-200"
+          class="p-2 text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-full transition-colors duration-200"
           title="Create Job"
         >
           <img src="@/icons/plus-circle-black.svg" alt="Create Job" class="w-6 h-6" />
@@ -38,7 +38,7 @@
         <!-- User greeting -->
         <router-link 
           to="/user" 
-          class="text-gray-700 font-medium hover:text-blue-600 hover:underline transition-colors duration-200 cursor-pointer"
+          class="text-gray-700 font-medium hover:text-teal-600 hover:underline transition-colors duration-200 cursor-pointer"
         >
           Hello {{ userStore.email }}
         </router-link>

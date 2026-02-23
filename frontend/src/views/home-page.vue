@@ -1,12 +1,12 @@
 <template>
     <div class="grid grid-cols-12 gap-4 p-5">
-        <div class="col-span-12 rounded bg-white shadow-xl border-2 border-gray-300 transition-all duration-300 ease-in-out overflow-hidden" v-auto-animate>
+        <div class="col-span-12 rounded-xl bg-white shadow-md border border-stone-200 transition-all duration-300 ease-in-out overflow-hidden" v-auto-animate>
             <PlanGeneratorWrapper />
         </div>
-        <div class="col-span-6 rounded bg-white shadow-xl border-2 border-gray-300 transition-all duration-300 ease-in-out overflow-hidden">
+        <div class="col-span-6 rounded-xl bg-white shadow-md border border-stone-200 transition-all duration-300 ease-in-out overflow-hidden">
             <SkillPieChart />
         </div>
-        <div class="col-span-6 rounded bg-white shadow-xl border-2 border-gray-300 transition-all duration-300 ease-in-out overflow-hidden">
+        <div class="col-span-6 rounded-xl bg-white shadow-md border border-stone-200 transition-all duration-300 ease-in-out overflow-hidden">
             <SalarySummary />
         </div>
     </div>

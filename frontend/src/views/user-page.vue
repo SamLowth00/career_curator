@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-stone-50 py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Page Header -->
       <div class="mb-8">
@@ -8,7 +8,7 @@
       </div>
 
       <!-- User Information Card -->
-      <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+      <div class="bg-white rounded-xl shadow-lg border border-stone-200 overflow-hidden">
         <!-- Card Header -->
         <div class="bg-gradient-to-r from-primary to-primary-hover px-6 py-4">
           <h2 class="text-xl font-semibold text-white">Personal Information</h2>
@@ -20,7 +20,7 @@
             <!-- First Name -->
             <div class="space-y-2">
               <label class="block text-sm font-medium text-gray-700">First Name</label>
-              <div class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <div class="flex items-center p-3 bg-stone-50 rounded-lg border border-stone-200">
                 <img src="@/icons/user-icon.svg" class="w-5 h-5 text-gray-400 mr-3" />
                 <span class="text-gray-900 font-medium">{{ userStore.firstName || 'Not provided' }}</span>
               </div>
@@ -29,7 +29,7 @@
             <!-- Last Name -->
             <div class="space-y-2">
               <label class="block text-sm font-medium text-gray-700">Last Name</label>
-              <div class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <div class="flex items-center p-3 bg-stone-50 rounded-lg border border-stone-200">
                 <img src="@/icons/user-icon.svg" class="w-5 h-5 text-gray-400 mr-3" />
                 <span class="text-gray-900 font-medium">{{ userStore.lastName || 'Not provided' }}</span>
               </div>
@@ -38,7 +38,7 @@
             <!-- Email Address -->
             <div class="space-y-2 md:col-span-2">
               <label class="block text-sm font-medium text-gray-700">Email Address</label>
-              <div class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <div class="flex items-center p-3 bg-stone-50 rounded-lg border border-stone-200">
                 <img src="@/icons/email-logo.svg" class="w-5 h-5 text-gray-400 mr-3" />
                 <span class="text-gray-900 font-medium">{{ userStore.email || 'Not provided' }}</span>
               </div>
@@ -48,8 +48,8 @@
       </div>
 
       <!-- Additional Info Card -->
-      <div class="mt-6 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+      <div class="mt-6 bg-white rounded-xl shadow-lg border border-stone-200 overflow-hidden">
+        <div class="px-6 py-4 bg-stone-50 border-b border-stone-200">
           <h3 class="text-lg font-semibold text-gray-900">Account Status</h3>
         </div>
         <div class="p-6">

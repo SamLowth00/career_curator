@@ -115,12 +115,12 @@ onMounted(async () => {
 }
 
 .plan-container a {
-    color: #2563eb; /* blue-600 */
+    color: #0D9488; /* teal-600 */
     text-decoration: underline;
 }
 
 .plan-container a:hover {
-    color: #1e40af; /* blue-800 */
+    color: #0F766E; /* teal-700 */
 }
 
 .plan-container code {
@@ -176,7 +176,7 @@ onMounted(async () => {
 }
 
 .plan-container th {
-    background-color: #f9fafb;
+    background-color: #F0FDFA; /* teal-50 */
     font-weight: 600;
 }
 </style>

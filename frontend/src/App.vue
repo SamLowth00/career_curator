@@ -1,5 +1,5 @@
 <template>
-    <div div class="bg-gradient-to-b from-white to-blue-200 h-[100vh]">
+    <div div class="bg-gradient-to-b from-stone-50 to-teal-50 h-[100vh]">
         <Navbar  v-if="userStore.email"/>
         <router-view />
     </div>

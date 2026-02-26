@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submitForm" class="max-w-md mx-auto mt-10 p-8 bg-white rounded-2xl shadow-md border border-stone-200">
+  <form @submit.prevent="submitForm" class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-md border border-stone-200">
     <div class="mb-4">
       <label for="title" class="block text-gray-700 font-bold mb-2">Job Title<span class="text-red-500">*</span></label>
       <input

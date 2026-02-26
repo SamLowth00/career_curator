@@ -1,21 +1,21 @@
 <template>
-    <div class="flex justify-center items-center min-h-[250px] max-h-[500px] overflow-scroll">
+    <div class="relative flex justify-center min-h-[250px] max-h-[500px]">
         <template v-if="fetchingPlan">
-            <span>FETCHING PLAN</span>
+            <span class="self-center">FETCHING PLAN</span>
         </template>
         <template v-else-if="!plan">
-            <button @click="handleGenerate" class="bg-primary rounded p-4 flex gap-1 shadow-lg text-white cursor-pointer hover:bg-primary-hover">
+            <button @click="handleGenerate" class="self-center bg-primary rounded p-4 flex gap-1 shadow-lg text-white cursor-pointer hover:bg-primary-hover">
                 <img src="@/icons/plus-circle-white.svg" alt="Create Job" class="w-6 h-6" />
                 Generate a new plan
             </button>
         </template>
         <template v-else>
-            <div class="flex flex-col gap-4">
+            <button @click="handleGenerate" class="absolute top-2 right-2 z-10 bg-primary rounded p-2 flex gap-1 shadow-lg text-white cursor-pointer hover:bg-primary-hover">
+                <img src="@/icons/plus-circle-white.svg" alt="Regenerate" class="w-5 h-5" />
+                Regenerate plan
+            </button>
+            <div class="overflow-scroll w-full">
                 <div class="plan-container" v-html="marked(plan)"></div>
-                <button @click="handleGenerate" class="bg-primary rounded p-4 flex gap-1 shadow-lg text-white cursor-pointer hover:bg-primary-hover self-center">
-                    <img src="@/icons/plus-circle-white.svg" alt="Regenerate" class="w-6 h-6" />
-                    Regenerate plan
-                </button>
             </div>
         </template>
     </div>

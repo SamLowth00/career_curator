@@ -4,6 +4,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from app.db import Base
 import uuid
 import datetime
+from pgvector.sqlalchemy import Vector
 class Job(Base):
     __tablename__ = "jobs"
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -13,6 +14,7 @@ class Job(Base):
     raw_title: Mapped[str] = mapped_column(String, nullable=False)
     raw_description: Mapped[str] = mapped_column(String, nullable=False)
     link: Mapped[str] = mapped_column(String, nullable=True)
+    embedding: Mapped[Vector] = mapped_column(Vector(1536), nullable=True)
 
 class Skill(Base):
     __tablename__ = "skills"

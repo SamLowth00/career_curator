@@ -6,6 +6,7 @@ from app.routes.plan import router as plan_router
 from app.routes.skill import router as skill_router
 from app.routes.salary import router as salary_router
 from app.routes.chat import router as agent_router
+from sqlalchemy import text
 
 from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from .env file
@@ -38,6 +39,9 @@ async def startup():
     try:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
+            await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+            await conn.execute(text("ALTER TABLE jobs ADD COLUMN IF NOT EXISTS embedding vector(1536)"))
+
         print("✅ Database tables created/verified successfully")
     except Exception as e:
         print(f"⚠️  Error creating tables: {e}")

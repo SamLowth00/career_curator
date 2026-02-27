@@ -6,8 +6,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.schema import HumanMessage, AIMessage
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.auth.models import User
-from app.langchain.agent.tools import JobSummaryTool
-# from app.langchain.agent.tools import JobSummaryTool, SkillAnalysisTool, StudyPlanTool
+from app.langchain.agent.tools.job_summary_tool import JobSummaryTool
 import json
 
 class CareerAgent:
@@ -52,7 +51,7 @@ class CareerAgent:
         - The "agent executor" runs everything together
         """
 
-        print(f"🔧 Creating agent with {len(self.tools)} tools...")
+        print(f"Creating agent with {len(self.tools)} tools...")
 
                 # Define the system prompt - this is like giving the agent a job description
         system_prompt = """You are a helpful career assistant for a user named {user_name}. 

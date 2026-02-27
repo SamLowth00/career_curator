@@ -8,6 +8,7 @@ from app.models import Job, Skill, JobSkill
 from app.schemas import JobCreate, JobResponse
 from app.langchain.parse_job import parse_job_with_langchain
 from app.auth.routes import current_active_user as get_current_active_user
+from app.services.embeddings import generate_embedding
 
 router = APIRouter()
 
@@ -45,8 +46,30 @@ async def create_job(job: JobCreate, db: AsyncSession = Depends(get_async_sessio
         job_skill = JobSkill(job_id=new_job.id, skill_id=skill.id)
         db.add(job_skill)
     
+    # 5. Generate embedding for the job summary
+    text_to_embed = f"{job.raw_title}: {summary}"
+    embedding = await generate_embedding(text_to_embed)
+    new_job.embedding = embedding
+    
     await db.commit()
     return new_job
+
+@router.post("/backfill-embeddings")
+async def backfill_embeddings(db: AsyncSession = Depends(get_async_session), user: User = Depends(get_current_active_user)):
+    result = await db.execute(
+        select(Job).where(Job.user_id == user.id).where(Job.embedding == None)
+    )
+    jobs_without_embeddings = result.scalars().all()
+
+    print(f"🔧 Backfilling embeddings for {len(jobs_without_embeddings)} jobs")
+
+    for job in jobs_without_embeddings:
+        text_to_embed = f"{job.raw_title}: {job.job_summary}"
+        job.embedding = await generate_embedding(text_to_embed)
+        print(f"✅ Generated embedding for: {job.raw_title}")
+
+    await db.commit()
+    return {"backfilled": len(jobs_without_embeddings)}
 
 @router.get("/", response_model=List[JobResponse])
 async def get_jobs(user: User = Depends(get_current_active_user), db: AsyncSession = Depends(get_async_session)):

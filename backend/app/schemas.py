@@ -46,3 +46,23 @@ class JobSkillRead(JobSkillBase):
 class SalarySummary(BaseModel):
     avg_salary: Optional[float] = None
     records_used: int = 0
+
+# --- UserSkill Schemas ---
+
+class UserSkillCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    level: Optional[int] = None  # 1=beginner, 2=intermediate, 3=expert
+
+class UserSkillUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    level: Optional[int] = None
+
+class UserSkillResponse(BaseModel):
+    id: UUID
+    name: str
+    description: Optional[str] = None
+    level: Optional[int] = None
+    class Config:
+        from_attributes = True

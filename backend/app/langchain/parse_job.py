@@ -3,7 +3,14 @@ from langchain_community.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
 import json
 
-def parse_job_with_langchain(title: str, description: str, user_skill_names: list[str]):
+LEVEL_LABELS = {1: "Beginner", 2: "Intermediate", 3: "Expert"}
+
+
+def parse_job_with_langchain(title: str, description: str, user_job_skill_names: list[str], user_known_skills: list[dict] = None):
+    user_skill_names = user_job_skill_names
+    if user_known_skills is None:
+        user_known_skills = []
+
     # Build the prompt
     prompt = f"""
 Given the following job title and description{',' if user_skill_names else ''}{" and the user's existing skills" if user_skill_names else ''}, do the following:
@@ -18,6 +25,13 @@ Job Description: {description}
 """
     if user_skill_names:
         prompt += f"\nUser's existing skills:\n{', '.join(user_skill_names)}\n"
+
+    if user_known_skills:
+        prompt += "\nUser's self-declared known skills (do NOT include these as required skills — the user already knows them):\n"
+        for s in user_known_skills:
+            level_label = LEVEL_LABELS.get(s.get("level"), "Unspecified")
+            desc = s.get("description") or "no description"
+            prompt += f"- {s['name']} ({level_label}): {desc}\n"
 
     prompt += """
 Respond ONLY in the following JSON format, and NOT as markdown:

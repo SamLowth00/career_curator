@@ -73,3 +73,23 @@ export async function getSavedPlan() {
     const response = await axiosApi.get('/plan/saved-plan');
     return response.data;  // will be the markdown string, or null
 }
+
+export async function getUserSkills() {
+    const response = await axiosApi.get('/user-skills/');
+    return response.data;
+}
+
+export async function createUserSkill({ name, description, level }) {
+    const response = await axiosApi.post('/user-skills/', { name, description, level });
+    return response.data;
+}
+
+export async function updateUserSkill(id, { name, description, level }) {
+    const response = await axiosApi.put(`/user-skills/${id}`, { name, description, level });
+    return response.data;
+}
+
+export async function deleteUserSkill(id) {
+    const response = await axiosApi.delete(`/user-skills/${id}`);
+    return response.data;
+}

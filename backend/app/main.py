@@ -6,6 +6,7 @@ from app.routes.plan import router as plan_router
 from app.routes.skill import router as skill_router
 from app.routes.salary import router as salary_router
 from app.routes.chat import router as agent_router
+from app.routes.user_skill import router as user_skill_router
 from sqlalchemy import text
 
 from dotenv import load_dotenv
@@ -34,7 +35,7 @@ async def startup():
     """Create database tables on startup if they don't exist"""
     from app.db import engine, Base
     from app.auth.models import User
-    from app.models import Job, Skill, JobSkill
+    from app.models import Job, Skill, JobSkill, UserSkill
     
     try:
         async with engine.begin() as conn:
@@ -60,6 +61,7 @@ app.include_router(salary_router, prefix="/salary", tags=["salary"])
 
 #agent
 app.include_router(agent_router, prefix="/chat", tags=["agent"])
+app.include_router(user_skill_router, prefix="/user-skills", tags=["user-skills"])
 @app.get("/")
 async def root():
     return {"message": "Hello World from FastAPI!"}

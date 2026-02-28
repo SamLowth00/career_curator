@@ -1,4 +1,4 @@
-from sqlalchemy import String, UUID, ForeignKey, Text, DateTime
+from sqlalchemy import String, UUID, ForeignKey, Text, DateTime, Integer, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import UUID
 from app.db import Base
@@ -41,3 +41,12 @@ class PlanJob(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     plan_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("plans.id", ondelete="CASCADE"))
     job_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("jobs.id", ondelete="SET NULL"), nullable=True)
+
+class UserSkill(Base):
+    __tablename__ = "user_skills"
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("user.id"), nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    description: Mapped[str] = mapped_column(String, nullable=True)
+    level: Mapped[int] = mapped_column(Integer, nullable=True)  # 1=beginner, 2=intermediate, 3=expert
+    __table_args__ = (UniqueConstraint('user_id', 'name'),)

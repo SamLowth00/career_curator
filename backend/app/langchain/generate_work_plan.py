@@ -1,9 +1,5 @@
 from typing import List
-from app.models import Skill
-import json
-# from langchain_community.llms import OpenAI
-from langchain_community.chat_models import ChatOpenAI
-from langchain.schema import HumanMessage
+from openai import OpenAI
 
 
 def generate_work_plan(list_of_skills: List[str]):
@@ -19,16 +15,12 @@ For EACH skill, provide:
 FORMAT: Use clean markdown with clear headings. Be concise but specific. Focus on actionable steps rather than lengthy explanations.
 
 If multiple skills, suggest learning order and include 1-2 cross-skill projects."""
-    
-    print("\n\n\n\n")
-    print("--------------------------------")
-    print(f"workplan prompt: {prompt}")
-    print("--------------------------------")
-    print("\n\n\n\n")
 
-    llm = ChatOpenAI(temperature=0.2, model="gpt-4")
-    response = llm([HumanMessage(content=prompt)])
+    client = OpenAI()
+    response = client.chat.completions.create(
+        model="gpt-4",
+        temperature=0.2,
+        messages=[{"role": "user", "content": prompt}],
+    )
 
-    return response.content
-
-        
+    return response.choices[0].message.content

@@ -36,4 +36,5 @@ package-mode = false
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.1.1"
 alembic = "^1.16.4"
+debugpy = "^1.8.20"
 

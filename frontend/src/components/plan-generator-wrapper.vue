@@ -3,6 +3,9 @@
         <template v-if="fetchingPlan">
             <span class="self-center">FETCHING PLAN</span>
         </template>
+        <template v-else-if="error">
+            <span class="self-center text-sm text-gray-500">Sorry, we faced an error with getting plans</span>
+        </template>
         <template v-else-if="!plan">
             <button @click="handleGenerate" class="self-center bg-primary rounded p-4 flex gap-1 shadow-lg text-white cursor-pointer hover:bg-primary-hover">
                 <img src="@/icons/plus-circle-white.svg" alt="Create Job" class="w-6 h-6" />
@@ -10,10 +13,13 @@
             </button>
         </template>
         <template v-else>
-            <button @click="handleGenerate" class="absolute top-2 right-2 z-10 bg-primary rounded p-2 flex gap-1 shadow-lg text-white cursor-pointer hover:bg-primary-hover">
-                <img src="@/icons/plus-circle-white.svg" alt="Regenerate" class="w-5 h-5" />
-                Regenerate plan
-            </button>
+            <div class="absolute top-2 right-2 z-10 flex flex-col items-end gap-1">
+                <span class="text-sm font-semibold text-gray-700">Plan based off {{ jobCount }} job{{ jobCount === 1 ? '' : 's' }}</span>
+                <button @click="handleGenerate" class="bg-primary rounded p-2 flex gap-1 shadow-lg text-white cursor-pointer hover:bg-primary-hover">
+                    <img src="@/icons/plus-circle-white.svg" alt="Regenerate" class="w-5 h-5" />
+                    Regenerate plan
+                </button>
+            </div>
             <div class="overflow-scroll w-full">
                 <div class="plan-container" v-html="marked(plan)"></div>
             </div>
@@ -26,20 +32,35 @@ import { ref, onMounted } from 'vue';
 import { generatePlan, getSavedPlan } from '@/api/api';
 import { marked } from 'marked';
 const plan = ref('');
-const fetchingPlan = ref(false)
+const jobCount = ref(0);
+const fetchingPlan = ref(false);
+const error = ref(false);
 
 async function handleGenerate () {
     fetchingPlan.value = true
-    const response = await generatePlan();
-    console.log('resp', response);
-    plan.value = response;
+    error.value = false
+    try {
+        await generatePlan();
+        const saved = await getSavedPlan();
+        if (saved) {
+            plan.value = saved.content;
+            jobCount.value = saved.job_count;
+        }
+    } catch {
+        error.value = true
+    }
     fetchingPlan.value = false
 }
 
 onMounted(async () => {
-    const saved = await getSavedPlan();
-    if (saved) {
-        plan.value = saved;
+    try {
+        const saved = await getSavedPlan();
+        if (saved) {
+            plan.value = saved.content;
+            jobCount.value = saved.job_count;
+        }
+    } catch {
+        error.value = true
     }
 })
 </script>

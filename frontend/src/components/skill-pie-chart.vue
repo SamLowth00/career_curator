@@ -54,7 +54,7 @@ const pieChartData = computed(() => {
   const labels = top5.map((skill) => skill.name)
   const data = top5.map((skill) => skill.job_count)
   if (rest.length > 0) {
-    labels.push(`Other (${rest.length} skills)`)
+    labels.push(`Other`)
     data.push(rest.reduce((sum, skill) => sum + skill.job_count, 0))
   }
   return {

@@ -3,6 +3,9 @@ from pydantic import BaseModel
 from uuid import UUID
 # --- Job Schemas ---
 
+class JobImportRequest(BaseModel):
+    url: str
+
 class JobCreate(BaseModel):
     raw_title: str
     raw_description: str

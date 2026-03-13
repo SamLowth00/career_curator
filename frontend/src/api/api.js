@@ -18,6 +18,13 @@ export async function getCurrentUser() {
     return response.data;
 }
 
+export async function importJobFromUrl(url) {
+    const response = await axiosApi.post('/jobs/import', { url }, {
+        headers: { 'Content-Type': 'application/json' }
+    });
+    return response.data;
+}
+
 export async function createJob({rawTitle, rawDescription, jobSalary, link}) {
     const payload = {
         raw_title: rawTitle,

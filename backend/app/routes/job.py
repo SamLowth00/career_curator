@@ -5,12 +5,17 @@ from typing import List
 from app.db import get_async_session
 from app.auth.models import User
 from app.models import Job, Skill, JobSkill, UserSkill
-from app.schemas import JobCreate, JobResponse
+from app.schemas import JobCreate, JobResponse, JobImportRequest
 from app.langchain.parse_job import parse_job_with_langchain
 from app.auth.routes import current_active_user as get_current_active_user
 from app.services.embeddings import generate_embedding
-
+from app.services.import_job import parse_job
 router = APIRouter()
+
+@router.post("/import")
+async def import_job_from_url(payload: JobImportRequest, user: User = Depends(get_current_active_user)):
+    job = parse_job(payload.url)
+    return job
 
 @router.post("/", response_model=JobResponse)
 async def create_job(job: JobCreate, db: AsyncSession = Depends(get_async_session), user: User = Depends(get_current_active_user)):

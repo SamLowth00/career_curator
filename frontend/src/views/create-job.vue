@@ -21,6 +21,39 @@
     </Transition>
 
     <form @submit.prevent="submitForm" class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-md border border-stone-200">
+      <!-- Import from URL -->
+      <div class="mb-6">
+        <button
+          type="button"
+          @click="showUrlImport = !showUrlImport"
+          class="flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors duration-200"
+        >
+          <span class="text-lg">{{ showUrlImport ? '−' : '+' }}</span>
+          Import from URL
+        </button>
+        <Transition name="fade">
+          <div v-if="showUrlImport" class="mt-3">
+            <div class="flex gap-2">
+              <input
+                v-model="importUrl"
+                type="url"
+                class="flex-1 px-3 py-2 border rounded"
+                placeholder="Paste job posting URL..."
+              />
+              <button
+                type="button"
+                :disabled="!importUrl || importing || isLinkedInUrl"
+                @click="handleImport"
+                class="px-4 py-2 bg-teal-600 hover:bg-teal-700 disabled:opacity-50 text-white font-semibold rounded-lg transition-colors duration-200"
+              >
+                {{ importing ? 'Importing...' : 'Import' }}
+              </button>
+            </div>
+            <p v-if="isLinkedInUrl" class="mt-1.5 text-sm text-red-500">We do not support LinkedIn URLs</p>
+          </div>
+        </Transition>
+      </div>
+
       <div class="mb-4">
         <label for="title" class="block text-gray-700 font-bold mb-2">Job Title<span class="text-red-500">*</span></label>
         <input
@@ -70,8 +103,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { createJob } from '@/api/api.js'
+import { ref, computed } from 'vue'
+import { createJob, importJobFromUrl } from '@/api/api.js'
 import { useRouter } from 'vue-router'
 
 const title = ref('')
@@ -80,6 +113,11 @@ const salary = ref(null)
 const link = ref('')
 const router = useRouter()
 const loading = ref(false)
+
+const showUrlImport = ref(false)
+const importUrl = ref('')
+const importing = ref(false)
+const isLinkedInUrl = computed(() => importUrl.value.includes('linkedin.com'))
 
 const messages = [
   'Parsing job description...',
@@ -101,6 +139,21 @@ function startMessages() {
 function stopMessages() {
   clearInterval(messageInterval)
   currentMessage.value = messages[0]
+}
+
+async function handleImport() {
+  importing.value = true
+  try {
+    const response = await importJobFromUrl(importUrl.value)
+    title.value = response.title || ''
+    description.value = response.description || ''
+    salary.value = response.salary || null
+    link.value = importUrl.value
+  } catch (err) {
+    console.log(err)
+  } finally {
+    importing.value = false
+  }
 }
 
 async function submitForm() {

@@ -3,51 +3,46 @@ import json
 
 client = OpenAI()
 
+SYSTEM_PROMPT = """You are an expert job analyst. Your task is to extract a concise summary and a list of key learnable skills from a job listing.
+
+Rules for skills:
+1. Only include concrete, nameable skills that can be learned through study, training, or practice — specific tools, methodologies, techniques, certifications, or domain knowledge.
+2. Do NOT include soft skills, personality traits, or vague competencies (e.g. "communication", "problem solving", "team player", "analytical thinking").
+3. Name each skill as concisely as possible — a short noun or noun phrase with no filler words like "techniques" or "skills".
+4. If a required skill matches or is very similar to one of the user's existing skills, use the exact name from that list.
+5. Otherwise, create a new concise skill name.
+6. Do not combine multiple skills into one entry — each skill must be a single, distinct concept.
+7. Include between 3 and 8 skills, prioritising the most important ones.
+
+Example of bad skill output: ["Communication", "Technical knowledge", "Problem solving", "Working in a team"]
+Example of good skill output: a short list of specific, learnable, nameable skills relevant to the role
+
+Respond ONLY in the following JSON format, not as markdown:
+{
+    "summary": "<one-paragraph job summary>",
+    "skills": ["Skill1", "Skill2", ...]
+}"""
+
+
 def parse_job_from_content(title: str, description: str, user_job_skill_names: list[str]):
     user_skill_names = user_job_skill_names
 
-    # Build the prompt
-    prompt = f"""
-Given the following job title and description{',' if user_skill_names else ''}{" and the user's existing skills" if user_skill_names else ''}, do the following:
-1. Write a one-paragraph summary of the job.
-2. Return a list of required skills for the job, that someone could go and learn. If a required skill matches or is very similar to one of the user's existing skills, use the exact name from the user's skills list. Otherwise, create a new skill name, for example if "Python" exists in the list, don't return "Python programming", return "Python".
+    user_message = f"Job Title: {title}\n\nJob Description:\n{description}"
 
-Please make the skill list as concise as possible, only including skills that someone would learn through lessons or a course, also don't combine skills together, they should each be individual skills.
-Please keep the number of skills between 1-6, only listing the most important skills.
-
-Job Title: {title}
-Job Description: {description}
-"""
     if user_skill_names:
-        prompt += f"\nUser's existing skills:\n{', '.join(user_skill_names)}\n"
-
-    prompt += """
-Respond ONLY in the following JSON format, and NOT as markdown:
-{
-    "summary": "<job summary here>",
-    "skills": ["Skill1", "Skill2", ...]
-}
-"""
-    print("\n\n\n\n")
-    print("--------------------------------")
-    print(f"workplan prompt: {prompt}")
-    print("--------------------------------")
-    print("\n\n\n\n")
+        user_message += f"\n\nUser's existing skills (match these where possible):\n{', '.join(user_skill_names)}"
 
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4o",
         temperature=0.2,
-        messages=[{"role": "user", "content": prompt}]
+        response_format={"type": "json_object"},
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_message},
+        ]
     )
     content = response.choices[0].message.content
 
-    print("\n\n\n\n")
-    print("--------------------------------")
-    print(f"response: {content}")
-    print("--------------------------------")
-    print("\n\n\n\n")
-
-    # Try to parse the response as JSON
     try:
         data = json.loads(content)
         summary = data.get("summary", "")
@@ -58,4 +53,3 @@ Respond ONLY in the following JSON format, and NOT as markdown:
         print(f"Failed to parse LLM response as JSON: {e}\nResponse was: {content}")
 
     return summary, skills
-

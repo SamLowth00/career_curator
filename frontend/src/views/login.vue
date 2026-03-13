@@ -26,7 +26,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
-import { login, getCurrentUser } from '@/api/api';
+import { login } from '@/api/api';
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();

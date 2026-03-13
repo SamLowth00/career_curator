@@ -1,15 +1,10 @@
-# from langchain_community.llms import OpenAI
-from langchain_community.chat_models import ChatOpenAI
-from langchain.schema import HumanMessage
+from openai import OpenAI
 import json
 
-LEVEL_LABELS = {1: "Beginner", 2: "Intermediate", 3: "Expert"}
+client = OpenAI()
 
-
-def parse_job_with_langchain(title: str, description: str, user_job_skill_names: list[str], user_known_skills: list[dict] = None):
+def parse_job_from_content(title: str, description: str, user_job_skill_names: list[str]):
     user_skill_names = user_job_skill_names
-    if user_known_skills is None:
-        user_known_skills = []
 
     # Build the prompt
     prompt = f"""
@@ -26,13 +21,6 @@ Job Description: {description}
     if user_skill_names:
         prompt += f"\nUser's existing skills:\n{', '.join(user_skill_names)}\n"
 
-    if user_known_skills:
-        prompt += "\nUser's self-declared known skills (do NOT include these as required skills — the user already knows them):\n"
-        for s in user_known_skills:
-            level_label = LEVEL_LABELS.get(s.get("level"), "Unspecified")
-            desc = s.get("description") or "no description"
-            prompt += f"- {s['name']} ({level_label}): {desc}\n"
-
     prompt += """
 Respond ONLY in the following JSON format, and NOT as markdown:
 {
@@ -46,29 +34,28 @@ Respond ONLY in the following JSON format, and NOT as markdown:
     print("--------------------------------")
     print("\n\n\n\n")
 
-
-    # llm = OpenAI(temperature=0.2)
-    # response = llm(prompt)
-
-    llm = ChatOpenAI(temperature=0.2, model="gpt-4")
-    response = llm([HumanMessage(content=prompt)])
+    response = client.chat.completions.create(
+        model="gpt-4",
+        temperature=0.2,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    content = response.choices[0].message.content
 
     print("\n\n\n\n")
     print("--------------------------------")
-    print(f"response: {response.content}")
+    print(f"response: {content}")
     print("--------------------------------")
     print("\n\n\n\n")
 
     # Try to parse the response as JSON
     try:
-        data = json.loads(response.content)
+        data = json.loads(content)
         summary = data.get("summary", "")
         skills = data.get("skills", [])
     except Exception as e:
-        # Fallback: return raw response if parsing fails
         summary = ""
         skills = []
-        print(f"Failed to parse LLM response as JSON: {e}\nResponse was: {response}")
+        print(f"Failed to parse LLM response as JSON: {e}\nResponse was: {content}")
 
     return summary, skills
 

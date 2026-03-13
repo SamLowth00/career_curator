@@ -4,9 +4,9 @@ from sqlalchemy import select
 from typing import List
 from app.db import get_async_session
 from app.auth.models import User
-from app.models import Job, Skill, JobSkill, UserSkill
+from app.models import Job, Skill, JobSkill
 from app.schemas import JobCreate, JobResponse, JobImportRequest
-from app.langchain.parse_job import parse_job_with_langchain
+from app.langchain.parse_job import parse_job_from_content
 from app.auth.routes import current_active_user as get_current_active_user
 from app.services.embeddings import generate_embedding
 from app.services.import_job import parse_job
@@ -23,13 +23,7 @@ async def create_job(job: JobCreate, db: AsyncSession = Depends(get_async_sessio
     user_skills = result.scalars().all()
     user_skill_names = [skill.name for skill in user_skills]
 
-    known_result = await db.execute(select(UserSkill).where(UserSkill.user_id == user.id))
-    user_known_skills = [
-        {"name": s.name, "level": s.level, "description": s.description}
-        for s in known_result.scalars().all()
-    ]
-
-    summary, required_skills = parse_job_with_langchain(job.raw_title, job.raw_description, user_skill_names, user_known_skills)
+    summary, required_skills = parse_job_from_content(job.raw_title, job.raw_description, user_skill_names)
     # 2. Get all skills in Skill table
 
     skill_name_map = {s.name.lower(): s for s in user_skills}

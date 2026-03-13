@@ -40,17 +40,16 @@ const loginMethod = async () => {
     error.value = '';
     try {
         await login(email.value, password.value)
-        // const user = await getCurrentUser();
-        // const { userEmail, first_name, last_name, id } = user;
-        // console.log('userEmail', userEmail);
-        // console.log('first_name', first_name);
-        // console.log('last_name', last_name);
-        // console.log('id', id);
-        // userStore.setUser({ email: userEmail, first_name, last_name, id });
         router.push('/');
     }
     catch (err) {
         console.warn('err', err);
+        const detail = err?.response?.data?.detail;
+        if (detail === 'LOGIN_BAD_CREDENTIALS') {
+            error.value = 'Incorrect email or password.';
+        } else {
+            error.value = 'Something went wrong. Please try again.';
+        }
     }
 }
 </script>

@@ -9,7 +9,6 @@ export const useUserStore = defineStore('user', {
     }),
     actions: {
         setUser(user) {
-            console.log('setting user', user);
             this.id = user.id;
             this.email = user.email;
             this.firstName = user.first_name;

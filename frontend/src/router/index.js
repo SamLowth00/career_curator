@@ -59,17 +59,13 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  console.log('test');
   if (to.meta.requiresAuth) {
     try {
-    console.log('try');
       const userStore = useUserStore();
       const user = await getCurrentUser();
-      console.log(user);
       userStore.setUser(user);
       next()
     } catch {
-      console.log('login');
       next({ name: 'Login' })
     }
   } else {

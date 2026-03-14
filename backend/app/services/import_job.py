@@ -45,7 +45,7 @@ def parse_job(url):
 - title: the job title
 - company: the company name
 - description: the full job description
-- salary: salary if mentioned, otherwise null
+- salary: annual salary as an integer (no currency symbols, no commas). If a salary band/range is given (e.g. "$80,000 - $100,000"), return the midpoint as an integer (e.g. 90000). If no salary is mentioned, return null.
 
 Return only valid JSON, no markdown, no explanation.
 

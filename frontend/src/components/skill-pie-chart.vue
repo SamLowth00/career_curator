@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <div class="pb-4">
         <Pie :data="pieChartData" :options="chartOptions" />
+        <p v-if="otherCount > 0" class="text-center text-sm font-semibold text-gray-400 mt-2">(+{{ otherCount }} other skills)</p>
     </div>
 </template>
 
@@ -43,20 +44,23 @@ const chartOptions = {
     },
     title: {
       display: true,
-      text: 'My Pie Chart'
+      text: 'My Skills',
+      font: {
+        size: 18
+      }
     }
   }
 }
+const otherCount = computed(() => {
+  const sorted = [...skillsData.value].sort((a, b) => b.job_count - a.job_count)
+  return sorted.slice(5).length
+})
+
 const pieChartData = computed(() => {
   const sorted = [...skillsData.value].sort((a, b) => b.job_count - a.job_count)
   const top5 = sorted.slice(0, 5)
-  const rest = sorted.slice(5)
   const labels = top5.map((skill) => skill.name)
   const data = top5.map((skill) => skill.job_count)
-  if (rest.length > 0) {
-    labels.push(`Other`)
-    data.push(rest.reduce((sum, skill) => sum + skill.job_count, 0))
-  }
   return {
     labels,
     datasets: [{

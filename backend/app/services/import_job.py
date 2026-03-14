@@ -54,18 +54,23 @@ Webpage text:
 
     client = OpenAI()
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4o",
         temperature=0,
+        response_format={"type": "json_object"},
         messages=[{"role": "user", "content": prompt}],
     )
 
-    raw = response.choices[0].message.content
+    raw = response.choices[0].message.content or ""
+
+    cleaned = cleanAiResponse(raw)
+
+    if not cleaned:
+        raise ValueError("AI returned empty response when parsing job.")
 
     try:
-        cleaned = cleanAiResponse(raw)
         result = json.loads(cleaned)
     except json.JSONDecodeError as e:
-        raise ValueError(f"AI returned unparseable response: {e}")
+        raise ValueError(f"AI returned unparseable JSON when parsing job: {e}") from e
 
     return result
 

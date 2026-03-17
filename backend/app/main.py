@@ -8,7 +8,7 @@ from app.routes.salary import router as salary_router
 from app.routes.chat import router as agent_router
 from app.routes.user_skill import router as user_skill_router
 from sqlalchemy import text
-
+from app.redis import init_redis, close_redis
 from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from .env file
 
@@ -44,11 +44,11 @@ async def startup():
             await conn.execute(text("ALTER TABLE jobs ADD COLUMN IF NOT EXISTS embedding vector(1536)"))
 
         print("✅ Database tables created/verified successfully")
+        #start redis
+        await init_redis()
     except Exception as e:
-        print(f"⚠️  Error creating tables: {e}")
+        print(f"⚠️  Error creating tables or starting redis: {e}")
         # Don't crash the app if tables already exist
-        
-#users
 app.include_router(auth_router, prefix="/auth/jwt", tags=["auth"])
 app.include_router(register_router, prefix="/auth", tags=["auth"])
 app.include_router(users_router, prefix="/users", tags=["users"])
@@ -62,6 +62,11 @@ app.include_router(salary_router, prefix="/salary", tags=["salary"])
 #agent
 app.include_router(agent_router, prefix="/chat", tags=["agent"])
 app.include_router(user_skill_router, prefix="/user-skills", tags=["user-skills"])
+
+@app.on_event("shutdown")
+async def shutdown():
+    await close_redis()
+ 
 @app.get("/")
 async def root():
     return {"message": "Hello World from FastAPI!"}

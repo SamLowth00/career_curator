@@ -10,6 +10,7 @@ from app.langchain.parse_job import parse_job_from_content
 from app.auth.routes import current_active_user as get_current_active_user
 from app.services.embeddings import generate_embedding
 from app.services.import_job import parse_job
+from app.cache import cache_key, invalidate
 router = APIRouter()
 
 @router.post("/import")
@@ -58,6 +59,9 @@ async def create_job(job: JobCreate, db: AsyncSession = Depends(get_async_sessio
     new_job.embedding = embedding
     
     await db.commit()
+
+    # invalidate cache for salary average
+    invalidate(cache_key("salary:avg", str(user.id)))
     return new_job
 
 @router.post("/backfill-embeddings")
@@ -125,5 +129,9 @@ async def delete_job(job_id: str, db: AsyncSession = Depends(get_async_session),
                 await db.delete(skill)
     
     await db.commit()
+
+    # invalidate cache for salary average
+    await invalidate(cache_key("salary:avg", str(user.id)))
+
 
     return None  
